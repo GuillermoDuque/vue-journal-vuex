@@ -1,32 +1,38 @@
 // export const myAction = async ({commit}) =>{
 
-import journalApi from "@/api/journalApi"
+import journalApi from "@/api/journalApi";
 
 // }
 
-export const loadEntries = async ({commit}) =>{
-    
-    const { data } = await journalApi.get('/entries.json')
-    const entries = []
-    for(let id of Object.keys( data )){
-        entries.push({
-            id,
-            ...data[id]
-        })
-    }
-    commit('setEntries', entries)
-}
+export const loadEntries = async ({ commit }) => {
+  const { data } = await journalApi.get("/entries.json");
+  const entries = [];
+  for (let id of Object.keys(data)) {
+    entries.push({
+      id,
+      ...data[id],
+    });
+  }
+  commit("setEntries", entries);
+};
 
-export const updateEntries = async ( {commit}, entry) =>{
-    const { date, picture, text } = entry
-    const dataToSave = { date, picture, text }
+export const updateEntries = async ({ commit }, entry) => {
+  const { date, picture, text } = entry;
+  const dataToSave = { date, picture, text };
 
-    const resp= await journalApi.put( `/entries/${ entry.id }.json`,dataToSave)
-    console.log(resp)
-    
-    commit('updateEntries', {...entry})
-}
+  await journalApi.put(`/entries/${entry.id}.json`, dataToSave);
 
-export const createEntries = async (/*{commit}*/) =>{
-    
-}
+  commit("updateEntries", { ...entry });
+};
+
+export const createEntries = async ({ commit }, entry) => {
+  const { date, picture, text } = entry;
+  const dataToSave = { date, picture, text };
+
+  const { data } = await journalApi.post(`/entries.json`, dataToSave);
+
+  dataToSave.id = data.name;
+  commit("addEntries", dataToSave);
+
+  return data.name;
+};

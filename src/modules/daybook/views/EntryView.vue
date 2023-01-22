@@ -52,7 +52,7 @@ export default {
     return {
       entry: null,
     };
-  }, 
+  },
   computed: {
     ...mapGetters("journal", ["getEntriesById"]),
     day() {
@@ -69,15 +69,29 @@ export default {
     },
   },
   methods: {
-    ...mapActions('journal',['updateEntries']),
+    ...mapActions("journal", ["updateEntries", "createEntries"]),
     loadEntry() {
-      const entry = this.getEntriesById(this.id);
-      if (!entry) return this.$router.push({ name: "no-entry" });
+      let entry;
+      if (this.id === "new") {
+        entry = {
+          text: "",
+          date: new Date().getTime(),
+        };
+      } else {
+        entry = this.getEntriesById(this.id);
+        if (!entry) return this.$router.push({ name: "no-entry" });
+      }
+
       this.entry = entry;
-    }, 
-    async saveEntry(){
-      this.updateEntries( this.entry )
-    }
+    },
+    async saveEntry() {
+      if (this.entry.id) {
+        await this.updateEntry(this.entry);
+      } else {
+        const id = await this.createEntries(this.entry);
+        this.$router.push({ name: "entry", params: { id } });
+      }
+    },
   },
   created() {
     this.loadEntry();

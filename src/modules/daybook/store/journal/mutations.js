@@ -14,6 +14,7 @@
        state.entries[idx] = entry
 }
 
-export const addEntries =  (/*state*/) =>{ 
+export const addEntries =  (state, entry) =>{ 
+       state.entries = [entry, ...state.entries]
 
 }
