@@ -22,10 +22,9 @@ describe("Pruebas en el FabButton components", () => {
   });
 
   test("debe de emitir el evento on:click cuando se hace click", () => {});
-const wrapper = shallowMount(FabButton)
+  const wrapper = shallowMount(FabButton);
 
-wrapper.find('button').trigger('click')
+  wrapper.find("button").trigger("click");
 
-expect(wrapper.emitted('on:click')).toHaveLength(1 )
-  
+  expect(wrapper.emitted("on:click")).toHaveLength(1);
 });
