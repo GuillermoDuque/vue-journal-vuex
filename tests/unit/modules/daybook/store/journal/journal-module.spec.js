@@ -58,4 +58,23 @@ describe('Vuex- Pruebas en el Journal Module', () =>{
 
         
     })
+
+    test('mutation: addEntries deleteEntry',()=>{
+
+        const store = createVuexStore(journalState)
+
+        store.commit('journal/addEntries',{id:'ABC-123', text:'Hola Mundo'})
+
+        var stateEntries = store.state.journal.entries
+        
+        expect(stateEntries.length).toBe(3)
+        expect( stateEntries.find( e => e.id ==='ABC-123')).toBeTruthy
+
+        store.commit('journal/deleteEntry', 'ABC-123')
+        stateEntries = store.state.journal.entries
+
+        expect(stateEntries.length).toBe(2)
+        expect( stateEntries.find( e => e.id ==='ABC-123')).toBeFalsy()
+        
+    })
 })
