@@ -116,4 +116,19 @@ describe('Vuex- Pruebas en el Journal Module', () =>{
         date: 1674550917901,
         text: "Hola mundo desde mock data test"})
     })
+
+    test("actions: createEntries deleteEntry", async ()=>{
+        const store = createVuexStore(journalState)
+
+        const newEntry={ date: 1627077227978, text: 'Nueva entrada desde las pruebas'}
+        
+        const id=await store.dispatch('journal/createEntries', newEntry)
+
+        expect(typeof id).toBe('string')
+        
+        expect(store.state.journal.entries.find(e => e.id === id)).toBeTruthy()
+
+        await store.dispatch('journal/deleteEntry', id)
+        expect(store.state.journal.entries.find(e=> e.id === id)).toBeFalsy()
+    })
 })
